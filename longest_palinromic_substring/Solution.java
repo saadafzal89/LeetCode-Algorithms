@@ -1,50 +1,36 @@
-
 public class Solution {
+	String res="";
 	
-	public boolean palindromeCheck(String str){
-		int len = str.length()-1;
-		int flag =0;
-		for(int i=0;i<(str.length()+1)/2;i++){
-			if(str.charAt(i)!=str.charAt(len)){
-				flag++;
-				break;
-			}
-			len--;
-		}
+	public String longestPalindrome(String s) {
+		int len = s.length();
+		if (len < 2)
+			return s;
 		
-		if(flag==0)
-			return true;
-		else
-			return false;
-	}
-
-	public String longestPalindrome(String s){
-		String res ="";
-		int i=0,j=s.length();
-		int half_way=(s.length()+1)/2; 
-		
-		while(i<=half_way && j>=half_way){
-			if(palindromeCheck(s.substring(i,j))){
-				res = s.substring(i,j);
-				return res;
-			}
-			else if(palindromeCheck(s.substring(i,j-1))){
-				res = s.substring(i,j-1);
-				return res;
-			}
-			else if(palindromeCheck(s.substring(i+1,j))){
-				res = s.substring(i+1,j);
-				return res;
-			}
-			i++;j--;	
-		}
-		return res;
+	    for (int i = 0; i < len-1; i++) {
+	     	String temp_res1 = extendPalindrome(s, i, i);  //assume odd length, try to extend Palindrome as possible
+	     	if(temp_res1.length()>res.length())
+	     		res = temp_res1;
+	     	String temp_res2= extendPalindrome(s, i, i+1); //assume even length.
+	     	if(temp_res2.length()>res.length())
+	     		res = temp_res2;
+	    }
+	    return res;
 	}
 	
-	public static void main(String[] args) {
-		String input = "eabcb";
+	private String extendPalindrome(String s, int j, int k) {
+		while (j >= 0 && k < s.length() && s.charAt(j) == s.charAt(k)) {
+			j--;
+			k++;
+		}
+		
+		return s.substring(j+1,k);
+	}
+	
+	public static void main(String args[]){
+		
+		String input = "babad";
 		Solution obj = new Solution();
 		String result = obj.longestPalindrome(input);
-		System.out.println("Longest palindromic string: "+result);
+		System.out.println("Longest palindromic substring is:"+result);
 	}
 }
